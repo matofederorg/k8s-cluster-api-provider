@@ -40,3 +40,5 @@
         msg: Hello another commit!
     - debug:
         msg: Hello another 111 commit!
+    - debug:
+        msg: Secret
