@@ -26,8 +26,6 @@
        command: "make check-quick"
        args:
          chdir: "{{ project_tf_dir }}"
-     - debug:
-         msg: "cancel commit"
      always:
      - name: Cleanup
        command: "make fullclean"
