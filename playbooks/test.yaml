@@ -1,0 +1,33 @@
+---
+- name: E2E test
+  hosts: all
+  roles:
+  - ensure-dependencies
+  vars:
+    mode: "{{ test }}"
+  environment:
+    ENVIRONMENT: "{{ cloud_provider }}"
+  tasks:
+  - name: Get PR details
+    uri:
+      url: "https://api.github.com/repos/{{ zuul.project.name }}/pulls/{{ zuul.change }}"
+      body_format: json
+      headers:
+        Accept: application/vnd.github+json
+        X-GitHub-Api-Version: 2022-11-28
+    register: pull_request
+  - set_fact:
+      pull: "{{ pull_request.json }}"
+      prefix: "{{ pull_request.json.head.ref }}"
+      testcluster_name: "{{ pull_request.json.head.ref }}"
+  - name: Create environment file
+    import_tasks: create_env_file.yaml
+  - name: Create k8s cluster and run check-{{ mode }}
+    block:
+    - name: Create k8s cluster
+      import_tasks: create.yaml
+    - name: Execute sonobouy {{ mode }} check
+      import_tasks: check.yaml
+    always:
+    - name: Cleanup
+      import_tasks: fullclean.yaml
