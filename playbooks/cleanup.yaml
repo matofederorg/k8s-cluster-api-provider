@@ -3,9 +3,11 @@
   hosts: all
   vars:
     cloud_provider: "{{ cloud }}" # inherited from the parent job
-    project_tf_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/terraform"
-  environment:
-    ENVIRONMENT: "{{ cloud_provider }}"
   tasks:
-  - name: Cleanup
-    import_tasks: fullclean.yaml
+  - name: Ensure ospurge
+    pip:
+      name: "git+https://git.openstack.org/openstack/ospurge"
+  - name: Cleanup - purge openstack project
+    command: "ospurge --purge-own-project"
+    environment:
+      OS_CLOUD: "{{ cloud_provider }}"
