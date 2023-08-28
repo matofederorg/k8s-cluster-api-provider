@@ -10,6 +10,9 @@ on <https://docs.scs.community/docs/category/k8s-cluster-api-provider>.
 
 Please also consider reading the project specific release notes here.
 
+Just a README update! 
+Another update - could be dangerous! 
+
 <!-- Remove this soon! -->
 Until the rendering is fully proofread, the [old README.md](OLD_README.md)
 remains accessible.
