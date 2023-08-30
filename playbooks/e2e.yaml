@@ -2,7 +2,7 @@
 - name: E2E test
   hosts: all
   vars:
-    cloud_provider: "{{ cloud }}" # inherited from the parent job
+    cloud_provider: "{{ cloud }}"  # inherited from the parent job
     project_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}"
     project_tf_dir: "{{ project_dir }}/terraform"
     prefix: "pr{{ zuul.change }}"
@@ -56,7 +56,7 @@
     always:
     - name: Parse sonobouy results
       set_fact:
-        sonobouy_results_parsed: "{{ sonobouy_results.stdout | regex_search('=== Collecting results ===[\\S\\s]*? Sonobuoy conformance tests.*') }}"
+        sonobouy_results_parsed: "{{ sonobouy_results.stdout | regex_search('=== Collecting results ===[\\S\\s]*') }}"
       when: sonobouy_results is defined
       ignore_errors: true  # ignore when this task failed as it is nice to have, and we should ensure that fullclean is reached
     - name: Insert parsed sonobouy results to the warning message that will be appended to the comment zuul leaves on the PR
@@ -65,7 +65,7 @@
           zuul:
             warnings:
               - "<details>\n  <summary><b>Sonobouy results</b></summary>\n{{ sonobouy_results_parsed }}\n</details>"
-      when: sonobouy_results_parsed is defined
+      when: sonobouy_results_parsed is defined and sonobouy_results_parsed | length > 0
       ignore_errors: true  # ignore when this task failed as it is nice to have, and we should ensure that fullclean is reached
     - name: Cleanup - fullclean
       command: "make fullclean"
