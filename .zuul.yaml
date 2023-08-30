@@ -1,6 +1,6 @@
 ---
 - job:
-    name: test_conformance
+    name: e2e-conformance
     parent: openstack-access-base
     description: |
       Run tests of the configuration on test Kubernetes cluster using
@@ -15,7 +15,7 @@
     timeout: 10800  # 3h
 
 - job:
-    name: test_quick
+    name: e2e-quick
     parent: openstack-access-base
     description: |
       Run tests of the configuration on test Kubernetes cluster using
@@ -34,13 +34,13 @@
     merge-mode: "squash-merge"
     e2e-test:
       jobs:
-      - test_conformance
+      - e2e-conformance
     unlabel-on-update-e2e-test:
       jobs:
         - noop
     e2e-quick-test:
       jobs:
-      - test_quick
+      - e2e-quick
     unlabel-on-update-e2e-quick-test:
       jobs:
         - noop
