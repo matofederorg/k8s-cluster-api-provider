@@ -7,6 +7,8 @@
     cloud_provider: "{{ cloud }}" # inherited from the parent job
     prefix: "pr{{ zuul.change }}"
     testcluster_name: "pr{{ zuul.change }}"
+  environment:
+    OS_CLOUD: "{{ cloud_provider }}"
   tasks:
   - name: Ensure ospurge and openstackclient
     pip:
@@ -23,4 +25,4 @@
     - "{{ prefix }}-appcred"
     - "{{ prefix }}-{{ testcluster_name }}-appcred"
   - name: Cleanup - purge openstack project
-    command: "ospurge --purge-own-project --os-cloud {{ cloud_provider }} --verbose"
+    command: "ospurge --purge-own-project --verbose"
