@@ -29,6 +29,8 @@
       command: |-
         git remote add fork {{ git_repository_url }}
         git fetch fork {{ git_branch_name }}
+      args:
+        chdir: "{{ project_tf_dir }}"
       when: git_repository_is_fork | default(false) | bool
     - name: Checkout PR feature branch {{ git_branch_name }}
       command: "git checkout {{ git_branch_name }}"
