@@ -24,10 +24,6 @@
       set_fact:
         git_branch_name: "{{ pull_request.json.head.ref }}"
         git_repository_url: "{{ pull_request.json.head.repo.clone_url }}"
-    - name: Checkout PR feature branch {{ git_branch_name }}
-      command: "git checkout {{ git_branch_name }}"
-      args:
-        chdir: "{{ project_dir }}"
     - name: Create environment file
       template:
         src: "templates/environment.tfvars.j2"
@@ -35,7 +31,7 @@
   - name: Create k8s cluster and execute sonobouy {{ sonobouy_mode }} check
     block:
     - name: Create k8s cluster
-      command: "make create GITBRANCH={{ git_branch_name }} GITREPO={{ git_repository_url }}"
+      command: "make create GITREFERENCE={{ git_branch_name }} GITREPO={{ git_repository_url }}"
       args:
         chdir: "{{ project_tf_dir }}"
     - name: Get kubeconfig of the workload k8s cluster
