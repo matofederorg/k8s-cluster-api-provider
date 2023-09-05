@@ -26,7 +26,7 @@
         git_repository_url: "{{ pull_request.json.head.repo.clone_url }}"
         git_repository_is_fork: "{{ pull_request.json.head.repo.fork }}"
     - name: Fetch remote branch if the head repository is a fork
-      command: |-
+      command: |
         git remote add fork {{ git_repository_url }}
         git fetch fork {{ git_branch_name }}
       args:
