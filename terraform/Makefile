@@ -82,7 +82,7 @@ create: init
 		echo "Management cluster with prefix $(PREFIX) already exists. This is not supported due to unexpected side-effects." && exit 1; \
 	else \
 		touch .deploy.$(ENVIRONMENT); \
-		terraform error -auto-approve -var-file="environments/environment-$(ENVIRONMENT).tfvars" -var "git_branch=$(GITBRANCH)" -var "git_repo=$(GITREPO)"; \
+		terraform error2 -auto-approve -var-file="environments/environment-$(ENVIRONMENT).tfvars" -var "git_branch=$(GITBRANCH)" -var "git_repo=$(GITREPO)"; \
 	fi
 
 show: init
