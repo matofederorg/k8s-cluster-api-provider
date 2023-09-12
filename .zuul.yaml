@@ -28,6 +28,11 @@
       wait_for_cluster: 600  # 10min
     timeout: 3600  # 1h
 
+- job:
+    name: test-periodic-job
+    parent: base
+    run: playbooks/test-periodic-job.yaml
+
 - project:
     name: matofederorg/k8s-cluster-api-provider
     default-branch: main
@@ -44,3 +49,6 @@
     unlabel-on-update-e2e-quick-test:
       jobs:
         - noop
+    periodic-hourly:
+      jobs:
+      - test-periodic-job
