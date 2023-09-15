@@ -43,7 +43,7 @@
     timeout: 10800  # 3h
     vars:
       sonobouy_mode: conformance
-      git_reference:
+      git_reference: v6.0.0-rc-x
 
 - project:
     name: matofederorg/k8s-cluster-api-provider
