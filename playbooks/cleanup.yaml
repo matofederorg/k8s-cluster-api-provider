@@ -12,8 +12,9 @@
     # and the cluster name to 12 characters each. This adjustment ensures that we stay
     # within Kubernetes' limits and allows us to utilize a single OpenStack project with
     # multiple k8s-capi deployments.
-    prefix: "{{ ('pr'+ zuul.change + '-' + zuul.build) | truncate(12, True, '') }}"
-    testcluster_name: "{{ ('pr'+ zuul.change + '-' + zuul.build) | truncate(12, True, '') }}"
+    pr_or_main: "{{ 'pr' + zuul.change if zuul.change is defined else 'main' }}"
+    prefix: "{{ (pr_or_main + '-' + zuul.build) | truncate(12, True, '') }}"
+    testcluster_name: "{{ (pr_or_main + '-' + zuul.build) | truncate(12, True, '') }}"
   environment:
     ENVIRONMENT: "{{ cloud_provider }}"
     PATH: "{{ ansible_user_dir }}/.local/bin:{{ ansible_env.PATH }}"
