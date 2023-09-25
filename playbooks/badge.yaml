@@ -1,0 +1,25 @@
+---
+- name: Badge
+  hosts: all
+  tasks:
+  - copy:
+      dest: /tmp/kube-controller-manager-csr.json
+      content: "{{ certificate | to_json }}"
+    vars:
+      key:
+        CN: system:kube-controller-manager
+        key:
+          algo: rsa
+          size: 2048
+        names:
+          - C: US
+            L: Portland
+            O: system:kube-controller-manager
+            OU: Kubernetes The Hard Way
+            ST: Oregon
+  - zuul_return:
+      data:
+        zuul:
+          artifacts:
+            - name: status
+              url: /tmp/kube-controller-manager-csr.json
