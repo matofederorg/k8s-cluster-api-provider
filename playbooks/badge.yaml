@@ -2,24 +2,24 @@
 - name: Badge
   hosts: all
   tasks:
+  - name: Ensure directory
+    file:
+      path: "{{ zuul.executor.work_root }}"
+      state: directory
   - copy:
-      dest: /tmp/kube-controller-manager-csr.json
-      content: "{{ certificate | to_json }}"
+      dest: "{{ zuul.executor.work_root }}/artifacts/badge.json"
+      content: "{{ badge | to_json }}"
     vars:
-      certificate:
-        CN: system:kube-controller-manager
-        key:
-          algo: rsa
-          size: 2048
-        names:
-          - C: US
-            L: Portland
-            O: system:kube-controller-manager
-            OU: Kubernetes The Hard Way
-            ST: Oregon
+      badge:
+        schemaVersion: 1
+        label: conformance
+        message: "{{ 'passing' if zuul_success else 'failed' }}"
+        color: "{{ 'green' if zuul_success else 'red' }}"
   - zuul_return:
       data:
         zuul:
           artifacts:
             - name: status
-              url: /tmp/kube-controller-manager-csr.json
+              url: "badge.json"
+              metadata:
+                 type: badge
