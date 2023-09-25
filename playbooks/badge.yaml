@@ -6,7 +6,7 @@
       dest: /tmp/kube-controller-manager-csr.json
       content: "{{ certificate | to_json }}"
     vars:
-      key:
+      certificate:
         CN: system:kube-controller-manager
         key:
           algo: rsa
