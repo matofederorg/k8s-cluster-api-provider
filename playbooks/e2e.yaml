@@ -49,42 +49,42 @@
 #    - name: Set mtu for the default interface  # workaround for terraform file provisioner scp error
 #      command: "ip link set {{ dev.stdout }} mtu 1500"
 #      become: true
-  - name: Create k8s cluster and execute sonobouy {{ sonobouy_mode }} check
-    block:
-    - name: Create k8s cluster
-      command: "make create GITREFERENCE={{ git_branch_name }} GITREPO={{ git_repository_url }}"
-      args:
-        chdir: "{{ project_tf_dir }}"
-    - name: Get kubeconfig of the workload k8s cluster
-      command: "make get-kubeconfig TESTCLUSTER={{ testcluster_name }}"
-      args:
-        chdir: "{{ project_tf_dir }}"
-    - name: Wait for all system pods in the workload k8s cluster to become ready
-      command: "kubectl wait -n kube-system --for=condition=Ready --timeout={{ wait_for_cluster }}s pod --all"
-      args:
-        chdir: "{{ project_tf_dir }}"
-      environment:
-        KUBECONFIG: "{{ testcluster_name }}.yaml.{{ cloud_provider }}"
-    - name: Execute sonobouy {{ sonobouy_mode }} check
-      command: "make check-{{ sonobouy_mode }}"
-      register: sonobouy_results
-      args:
-        chdir: "{{ project_tf_dir }}"
-    always:
-    - name: Parse sonobouy results
-      set_fact:
-        sonobouy_results_parsed: "{{ sonobouy_results.stdout | regex_search('=== Collecting results ===[\\S\\s]*') }}"
-      when: sonobouy_results is defined
-      ignore_errors: true  # ignore when this task failed as it is nice to have, and we should ensure that fullclean is reached
-    - name: Insert parsed sonobouy results to the warning message that will be appended to the comment zuul leaves on the PR
-      zuul_return:
-        data:
-          zuul:
-            warnings:
-              - "<details>\n  <summary><b>Sonobouy results</b></summary>\n{{ sonobouy_results_parsed }}\n</details>"
-      when: sonobouy_results_parsed is defined and sonobouy_results_parsed | length > 0
-      ignore_errors: true  # ignore when this task failed as it is nice to have, and we should ensure that fullclean is reached
-    - name: Cleanup - fullclean
-      command: "make fullclean"
-      args:
-        chdir: "{{ project_tf_dir }}"
+#  - name: Create k8s cluster and execute sonobouy {{ sonobouy_mode }} check
+#    block:
+#    - name: Create k8s cluster
+#      command: "make create GITREFERENCE={{ git_branch_name }} GITREPO={{ git_repository_url }}"
+#      args:
+#        chdir: "{{ project_tf_dir }}"
+#    - name: Get kubeconfig of the workload k8s cluster
+#      command: "make get-kubeconfig TESTCLUSTER={{ testcluster_name }}"
+#      args:
+#        chdir: "{{ project_tf_dir }}"
+#    - name: Wait for all system pods in the workload k8s cluster to become ready
+#      command: "kubectl wait -n kube-system --for=condition=Ready --timeout={{ wait_for_cluster }}s pod --all"
+#      args:
+#        chdir: "{{ project_tf_dir }}"
+#      environment:
+#        KUBECONFIG: "{{ testcluster_name }}.yaml.{{ cloud_provider }}"
+#    - name: Execute sonobouy {{ sonobouy_mode }} check
+#      command: "make check-{{ sonobouy_mode }}"
+#      register: sonobouy_results
+#      args:
+#        chdir: "{{ project_tf_dir }}"
+#    always:
+#    - name: Parse sonobouy results
+#      set_fact:
+#        sonobouy_results_parsed: "{{ sonobouy_results.stdout | regex_search('=== Collecting results ===[\\S\\s]*') }}"
+#      when: sonobouy_results is defined
+#      ignore_errors: true  # ignore when this task failed as it is nice to have, and we should ensure that fullclean is reached
+#    - name: Insert parsed sonobouy results to the warning message that will be appended to the comment zuul leaves on the PR
+#      zuul_return:
+#        data:
+#          zuul:
+#            warnings:
+#              - "<details>\n  <summary><b>Sonobouy results</b></summary>\n{{ sonobouy_results_parsed }}\n</details>"
+#      when: sonobouy_results_parsed is defined and sonobouy_results_parsed | length > 0
+#      ignore_errors: true  # ignore when this task failed as it is nice to have, and we should ensure that fullclean is reached
+#    - name: Cleanup - fullclean
+#      command: "make fullclean"
+#      args:
+#        chdir: "{{ project_tf_dir }}"

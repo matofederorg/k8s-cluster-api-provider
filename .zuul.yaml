@@ -8,6 +8,7 @@
       This job is not intended to be run directly, but instead must be inherited from it.
     pre-run: playbooks/dependencies.yaml
     run: playbooks/e2e.yaml
+    post-run: playbooks/badge.yaml
     cleanup-run: playbooks/cleanup.yaml  # executed also when the job is canceled
     vars:
       wait_for_cluster: 600  # 10min
