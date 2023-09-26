@@ -36,7 +36,9 @@
 - job:
     name: k8s-cluster-api-provider-e2e-conformance-daily
     parent: k8s-cluster-api-provider-e2e-abstract
-    branches: main
+    branches:
+    - main
+    - release/v6.0.0
     description: |
       Run **daily** e2e tests of k8s-cluster-api-provider project using
       [sonobuoy](https://sonobuoy.io/) with mode conformance meaning
@@ -44,7 +46,6 @@
     timeout: 10800  # 3h
     vars:
       sonobouy_mode: conformance
-      git_reference: {{ zuul.branch }}
 
 - project:
     name: matofederorg/k8s-cluster-api-provider
@@ -64,4 +65,6 @@
         - noop
     periodic-daily:
       jobs:
-      - k8s-cluster-api-provider-e2e-conformance-daily
+      - k8s-cluster-api-provider-e2e-conformance-daily:
+          vars:
+            git_reference: "{{ zuul.branch }}"
