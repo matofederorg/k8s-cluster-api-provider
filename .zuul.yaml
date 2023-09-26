@@ -47,7 +47,7 @@
       git_reference: v6.0.0
 
 - project:
-    name: SovereignCloudStack/k8s-cluster-api-provider
+    name: matofederorg/k8s-cluster-api-provider
     default-branch: main
     merge-mode: "squash-merge"
     e2e-test:
