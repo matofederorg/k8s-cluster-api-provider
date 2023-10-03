@@ -33,6 +33,21 @@
     vars:
       sonobouy_mode: quick
 
+- job:
+    name: k8s-cluster-api-provider-e2e-conformance-daily
+    parent: k8s-cluster-api-provider-e2e-abstract
+    branches: main
+    description: |
+      Run **daily** e2e tests of k8s-cluster-api-provider project using
+      [sonobuoy](https://sonobuoy.io/) with mode conformance meaning
+      it will test if the Kubernetes cluster is conformant to the CNCF.
+    timeout: 10800  # 3h
+    vars:
+      sonobouy_mode: conformance
+      git_reference: v6.0.0
+
+
+
 - project:
     name: matofederorg/k8s-cluster-api-provider
     default-branch: main
@@ -51,6 +66,4 @@
         - noop
     periodic-daily:
       jobs:
-      - k8s-cluster-api-provider-e2e-conformance:
-          vars:
-            git_reference: "{{ zuul.branch }}"
+      - k8s-cluster-api-provider-e2e-conformance-daily
