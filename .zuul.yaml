@@ -36,7 +36,7 @@
 - job:
     name: k8s-cluster-api-provider-e2e-conformance-daily
     parent: k8s-cluster-api-provider-e2e-abstract
-    #branches: main
+    branches: main
     description: |
       Run **daily** e2e tests of k8s-cluster-api-provider project using
       [sonobuoy](https://sonobuoy.io/) with mode conformance meaning
