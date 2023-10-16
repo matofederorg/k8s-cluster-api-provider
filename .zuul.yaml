@@ -32,7 +32,6 @@
     timeout: 3600  # 1h
     vars:
       sonobouy_mode: quick
-      git_reference: "test-zuul"
 
 - project:
     name: matofederorg/k8s-cluster-api-provider
