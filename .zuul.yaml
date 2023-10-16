@@ -30,9 +30,9 @@
       Run e2e tests of k8s-cluster-api-provider project using
       [sonobuoy](https://sonobuoy.io/) with mode quick.
     timeout: 3600  # 1h
-    override-checkout: "{{ zuul.branch }}"
     vars:
       sonobouy_mode: quick
+      git_reference: "test-zuul"
 
 - project:
     name: matofederorg/k8s-cluster-api-provider
