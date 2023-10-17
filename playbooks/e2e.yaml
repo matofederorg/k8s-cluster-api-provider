@@ -41,8 +41,8 @@
         git_repository_url: "{{ git_repo | default(pull_request.json.head.repo.clone_url) | default(git_repo_default) }}"
     - name: Checkout PR branch
       ansible.builtin.git:
-        repo: "{{ git_repository_url }}"
-        dest: "{{ zuul.project.src_dir }}"
+        repo: "{{ zuul.project.src_dir }}"
+        clone: false
         version: "{{ git_branch_name }}"
       when: zuul.change is defined
     - name: Create environment file
