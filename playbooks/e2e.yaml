@@ -42,8 +42,11 @@
     - name: Checkout PR branch
       ansible.builtin.git:
         repo: "{{ git_repository_url }}"
+        clone: false
         dest: "{{ zuul.project.src_dir }}"
         version: "{{ git_branch_name }}"
+      args:
+        chdir: "{{ zuul.project.src_dir }}"
       when: zuul.change is defined
     - name: Create environment file
       ansible.builtin.template:
