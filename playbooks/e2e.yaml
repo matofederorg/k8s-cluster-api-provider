@@ -32,6 +32,8 @@
           X-GitHub-Api-Version: 2022-11-28
       register: pull_request
       when: zuul.change is defined  # execute when the e2e pipeline is initiated on a PR
+    - name: Force a failure
+      ansible.builtin.command: /bin/false
     - name: |
         Set facts -
         Priority is given to the values of git_reference and git_repo over variables collected from the PR.
